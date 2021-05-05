@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+     
+  <groupId>uuverifiers</groupId>
+  <artifactId>ecma2020-regex-parser</artifactId>
+  <version>0.5</version>
+  <packaging>jar</packaging>
+     
+  <name>ecma2020-regex-parser</name>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.sf.squirrel-sql.thirdparty-non-maven</groupId>
+      <artifactId>java-cup</artifactId>
+      <version>0.11a</version>
+    </dependency>
+  </dependencies>
+  
+  <distributionManagement>
+    <repository>
+        <id>absolute directory</id>
+        <url>file:///home/wv/public_html/maven/</url>
+    </repository>
+  </distributionManagement>
+</project>

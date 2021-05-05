@@ -1,0 +1,468 @@
+--------------------------------------------------------------------------------
+-- BNF Grammar of ECMAScript 2020
+-- https://www.ecma-international.org/ecma-262/#sec-regexp-regular-expression-objects
+
+--------------------------------------------------------------------------------
+-- Entry point
+
+-- Pattern ::=
+--   Disjunction
+-- Disjunction ::=
+--   Alternative
+--   Alternative|Disjunction
+
+Pattern.        PatternC        ::= [AlternativeC];
+
+-- Alternative::
+--   [empty]
+--   Alternative Term
+
+Alternative.    AlternativeC    ::= [TermC];    
+
+separator nonempty AlternativeC "|";
+
+-- Term::
+--   Assertion
+--   Atom
+--   Atom Quantifier
+
+AssertionTerm.  TermC           ::= AssertionC;
+AtomTerm.       TermC           ::= AtomC;
+AtomQuanTerm.   TermC           ::= AtomC QuantifierC;
+
+separator TermC "";
+
+-- Assertion::
+-- ^
+-- $
+-- \b
+-- \B
+-- (?=Disjunction)
+-- (?!Disjunction)
+-- (?<=Disjunction)
+-- (?<!Disjunction)
+
+BegAnchor.      AssertionC      ::= "^";
+EndAnchor.      AssertionC      ::= "$";
+WordAnchor.     AssertionC      ::= "\\" "b";
+NonWordAnchor.  AssertionC      ::= "\\" "B";
+PosLookahead.   AssertionC      ::= "(" "?" "=" [AlternativeC] ")";
+NegLookahead.   AssertionC      ::= "(" "?" "!" [AlternativeC] ")";
+PosLookbehind.  AssertionC      ::= "(" "?" "<" "=" [AlternativeC] ")";
+NegLookbehind.  AssertionC      ::= "(" "?" "<" "!" [AlternativeC] ")";
+
+-- Quantifier::
+--   QuantifierPrefix
+--   QuantifierPrefix ?
+
+Quantifier.           QuantifierC ::= QuantifierPrefixC;
+QuantifierNonGreedy.  QuantifierC ::= QuantifierPrefixC "?";
+
+-- QuantifierPrefix::
+--   *
+--   +
+--   ?
+--   {DecimalDigits}
+--   {DecimalDigits,}
+--   {DecimalDigits,DecimalDigits}
+
+StarQuantifier.  QuantifierPrefixC ::= "*";
+PlusQuantifier.  QuantifierPrefixC ::= "+";
+OptQuantifier.   QuantifierPrefixC ::= "?";
+Loop1Quantifier. QuantifierPrefixC ::= "{" [DecimalDigit] "}";
+Loop2Quantifier. QuantifierPrefixC ::= "{" [DecimalDigit] "," "}";
+Loop3Quantifier. QuantifierPrefixC ::= "{" [DecimalDigit] "," [DecimalDigit] "}";
+
+-- Atom::
+--   PatternCharacter
+--   .
+--   \AtomEscape
+--   CharacterClass[?U]
+--   (GroupSpecifier[?U]Disjunction)
+--   (?:Disjunction)
+
+PatternCharAtom.AtomC           ::= PatternCharacter;
+DotAtom.        AtomC           ::= ".";
+EscapeAtom.     AtomC           ::= "\\" AtomEscapeC;
+CharClassAtom.  AtomC           ::= CharacterClassC;
+GroupAtom.      AtomC           ::= "(" GroupSpecifierC [AlternativeC] ")";
+NonCaptGroup.   AtomC           ::= "(" "?" ":" [AlternativeC] ")";
+
+-- SyntaxCharacter::one of
+-- ^$\.*+?()[]{}|
+
+-- PatternCharacter::
+--   SourceCharacter but not SyntaxCharacter
+
+-- ControlEscape::one of
+--   fnrtv
+
+-- ControlLetter::one of
+--   abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+-- Different character types; those are kept disjoint to avoid scanning problems
+
+SyntaxCharacter1.        SyntaxCharacter    ::= "^";
+SyntaxCharacter2.        SyntaxCharacter    ::= "\\";
+SyntaxCharacter3.        SyntaxCharacter    ::= "]";
+SyntaxCharacter4.        SyntaxCharacter    ::= SyntaxCharacterSub;
+
+SyntaxCharacterSub1.     SyntaxCharacterSub ::= "$";
+SyntaxCharacterSub2.     SyntaxCharacterSub ::= ".";
+SyntaxCharacterSub3.     SyntaxCharacterSub ::= "*";
+SyntaxCharacterSub4.     SyntaxCharacterSub ::= "+";
+SyntaxCharacterSub5.     SyntaxCharacterSub ::= "?";
+SyntaxCharacterSub6.     SyntaxCharacterSub ::= "(";
+SyntaxCharacterSub7.     SyntaxCharacterSub ::= ")";
+SyntaxCharacterSub8.     SyntaxCharacterSub ::= "[";
+SyntaxCharacterSub9.     SyntaxCharacterSub ::= "{";
+SyntaxCharacterSub10.    SyntaxCharacterSub ::= "}";
+SyntaxCharacterSub11.    SyntaxCharacterSub ::= "|";
+
+NormalCharPat.           PatternCharacter   ::= NormalChar;
+DecimalDigitPat.         PatternCharacter   ::= DecimalDigit;
+DashPat.                 PatternCharacter   ::= "-";
+
+ControlEscapeF.          ControlEscape      ::= "f";
+ControlEscapeN.          ControlEscape      ::= "n";
+ControlEscapeR.          ControlEscape      ::= "r";
+ControlEscapeT.          ControlEscape      ::= "t";
+ControlEscapeV.          ControlEscape      ::= "v";
+
+ControlLettera.          ControlLetter      ::= "a";
+ControlLetterb.          ControlLetter      ::= "b";
+ControlLetterc.          ControlLetter      ::= "c";
+ControlLetterd.          ControlLetter      ::= "d";
+ControlLettere.          ControlLetter      ::= "e";
+ControlLetterf.          ControlLetter      ::= "f";
+ControlLetterg.          ControlLetter      ::= "g";
+ControlLetterh.          ControlLetter      ::= "h";
+ControlLetteri.          ControlLetter      ::= "i";
+ControlLetterj.          ControlLetter      ::= "j";
+ControlLetterk.          ControlLetter      ::= "k";
+ControlLetterl.          ControlLetter      ::= "l";
+ControlLetterm.          ControlLetter      ::= "m";
+ControlLettern.          ControlLetter      ::= "n";
+ControlLettero.          ControlLetter      ::= "o";
+ControlLetterp.          ControlLetter      ::= "p";
+ControlLetterq.          ControlLetter      ::= "q";
+ControlLetterr.          ControlLetter      ::= "r";
+ControlLetters.          ControlLetter      ::= "s";
+ControlLettert.          ControlLetter      ::= "t";
+ControlLetteru.          ControlLetter      ::= "u";
+ControlLetterv.          ControlLetter      ::= "v";
+ControlLetterw.          ControlLetter      ::= "w";
+ControlLetterx.          ControlLetter      ::= "x";
+ControlLettery.          ControlLetter      ::= "y";
+ControlLetterz.          ControlLetter      ::= "z";
+
+ControlLetterA.          ControlLetter      ::= "A";
+ControlLetterB.          ControlLetter      ::= "B";
+ControlLetterC.          ControlLetter      ::= "C";
+ControlLetterD.          ControlLetter      ::= "D";
+ControlLetterE.          ControlLetter      ::= "E";
+ControlLetterF.          ControlLetter      ::= "F";
+ControlLetterG.          ControlLetter      ::= "G";
+ControlLetterH.          ControlLetter      ::= "H";
+ControlLetterI.          ControlLetter      ::= "I";
+ControlLetterJ.          ControlLetter      ::= "J";
+ControlLetterK.          ControlLetter      ::= "K";
+ControlLetterL.          ControlLetter      ::= "L";
+ControlLetterM.          ControlLetter      ::= "M";
+ControlLetterN.          ControlLetter      ::= "N";
+ControlLetterO.          ControlLetter      ::= "O";
+ControlLetterP.          ControlLetter      ::= "P";
+ControlLetterQ.          ControlLetter      ::= "Q";
+ControlLetterR.          ControlLetter      ::= "R";
+ControlLetterS.          ControlLetter      ::= "S";
+ControlLetterT.          ControlLetter      ::= "T";
+ControlLetterU.          ControlLetter      ::= "U";
+ControlLetterV.          ControlLetter      ::= "V";
+ControlLetterW.          ControlLetter      ::= "W";
+ControlLetterX.          ControlLetter      ::= "X";
+ControlLetterY.          ControlLetter      ::= "Y";
+ControlLetterZ.          ControlLetter      ::= "Z";
+
+token SpecialNormalChar  (char - ["@<>=-^$/\\.,:*+?!()[]{}|0123456789a-zA-Z"]);
+
+ControlLetterNormalChar. NormalChar         ::= ControlLetter;
+SpecialLetterNormalChar. NormalChar         ::= SpecialNormalChar;
+ExtraLetterNormalChar.   NormalChar         ::= ExtraNormalChar;
+
+NormalChar1.             ExtraNormalChar    ::= ",";
+NormalChar2.             ExtraNormalChar    ::= "<";
+NormalChar3.             ExtraNormalChar    ::= ">";
+NormalChar4.             ExtraNormalChar    ::= "=";
+NormalChar5.             ExtraNormalChar    ::= "!";
+NormalChar6.             ExtraNormalChar    ::= "@";
+NormalChar7.             ExtraNormalChar    ::= ":";
+NormalChar8.             ExtraNormalChar    ::= "/";
+
+DecimalDigit0.           DecimalDigit       ::= "0";
+PositiveDec.             DecimalDigit       ::= PositiveDecimal;
+
+DecimalDigit1.           PositiveDecimal    ::= "1";
+DecimalDigit2.           PositiveDecimal    ::= "2";
+DecimalDigit3.           PositiveDecimal    ::= "3";
+DecimalDigit4.           PositiveDecimal    ::= "4";
+DecimalDigit5.           PositiveDecimal    ::= "5";
+DecimalDigit6.           PositiveDecimal    ::= "6";
+DecimalDigit7.           PositiveDecimal    ::= "7";
+DecimalDigit8.           PositiveDecimal    ::= "8";
+DecimalDigit9.           PositiveDecimal    ::= "9";
+
+separator nonempty DecimalDigit "";
+
+NoDecimalDigits.         MaybeDecimalDigits ::= ;
+SomeDecimalDigits.       MaybeDecimalDigits ::= [DecimalDigit];
+
+HexDigitDec.             HexDigit           ::= DecimalDigit;
+HexDigita.               HexDigit           ::= "a";
+HexDigitb.               HexDigit           ::= "b";
+HexDigitc.               HexDigit           ::= "c";
+HexDigitd.               HexDigit           ::= "d";
+HexDigite.               HexDigit           ::= "e";
+HexDigitf.               HexDigit           ::= "f";
+HexDigitA.               HexDigit           ::= "A";
+HexDigitB.               HexDigit           ::= "B";
+HexDigitC.               HexDigit           ::= "C";
+HexDigitD.               HexDigit           ::= "D";
+HexDigitE.               HexDigit           ::= "E";
+HexDigitF.               HexDigit           ::= "F";
+
+separator nonempty HexDigit "";
+
+OctalDigit0.             OctalDigit         ::= "0";
+OctalDigit1.             OctalDigit         ::= "1";
+OctalDigit2.             OctalDigit         ::= "2";
+OctalDigit3.             OctalDigit         ::= "3";
+OctalDigit4.             OctalDigit         ::= "4";
+OctalDigit5.             OctalDigit         ::= "5";
+OctalDigit6.             OctalDigit         ::= "6";
+OctalDigit7.             OctalDigit         ::= "7";
+
+-- AtomEscape::
+--   DecimalEscape
+--   CharacterClassEscape[?U]
+--   CharacterEscape[?U]
+--   [+N]kGroupName[?U]
+
+-- We include the case of octal escapes, starting with 0 in the
+-- DecAtomEscape case
+DecAtomEscape.   AtomEscapeC     ::= DecimalDigit MaybeDecimalDigits;
+CCAtomEscape.    AtomEscapeC     ::= CharacterClassEscapeC;
+CharAtomEscape.  AtomEscapeC     ::= CharacterEscapeC;
+
+-- CharacterEscape[U]::
+--   ControlEscape
+--   c ControlLetter
+--   0[lookahead ∉ DecimalDigit]
+--   HexEscapeSequence
+--   RegExpUnicodeEscapeSequence[?U]
+--   IdentityEscape[?U]
+
+ControlCharEscape.   CharacterEscapeC ::= ControlEscape;
+LetterCharEscape.    CharacterEscapeC ::= "c" ControlLetter;
+HexCharEscape.       CharacterEscapeC ::= HexEscapeSequenceC;
+RegExpUnicodeEscape. CharacterEscapeC ::= RegExpUnicodeEscapeSequenceC;
+IdentityEscape.      CharacterEscapeC ::= IdentityEscapeC;
+
+-- The null character escape is included in the DecAtomEscape and
+-- OctClassEscape productions
+--
+-- NullCharEscape.    CharacterEscapeC ::= "0";
+
+-- HexEscapeSequence::
+--   x HexDigit HexDigit
+
+HexEscapeSequence.   HexEscapeSequenceC ::= "x" HexDigit HexDigit;
+
+-- GroupSpecifier[U]::
+--   [empty]
+--   ? GroupName[?U]
+
+NoGroupSpecifier. GroupSpecifierC     ::= ;
+GroupSpecifier.   GroupSpecifierC     ::= "?" "<" ">"; --  GroupNameC;
+
+-- GroupName[U]::
+-- <RegExpIdentifierName[?U]>
+-- RegExpIdentifierName[U]::
+-- RegExpIdentifierStart[?U]
+-- RegExpIdentifierName[?U]RegExpIdentifierPart[?U]
+-- RegExpIdentifierStart[U]::
+-- UnicodeIDStart
+-- $
+-- _
+-- \RegExpUnicodeEscapeSequence[+U]
+-- [~U]UnicodeLeadSurrogateUnicodeTrailSurrogate
+-- RegExpIdentifierPart[U]::
+-- UnicodeIDContinue
+-- $
+-- \RegExpUnicodeEscapeSequence[+U]
+-- [~U]UnicodeLeadSurrogateUnicodeTrailSurrogate
+-- <ZWNJ>
+-- <ZWJ>
+
+-- RegExpUnicodeEscapeSequence[U]::
+--   [+U]uLeadSurrogate\uTrailSurrogate
+--   [+U]uLeadSurrogate
+--   [+U]uTrailSurrogate
+--   [+U]uNonSurrogate
+--   [~U]uHex4Digits
+--   [+U]u{CodePoint}
+
+Hex4UniEscapeSequence.      RegExpUnicodeEscapeSequenceC ::=
+                              "u" HexDigit HexDigit HexDigit HexDigit;
+CodepointUniEscapeSequence. RegExpUnicodeEscapeSequenceC ::=
+                              "u" "{" [HexDigit] "}";
+
+-- UnicodeLeadSurrogate::
+-- anyUnicodecodepointintheinclusiverange
+-- UnicodeTrailSurrogate
+-- anyUnicodecodepointintheinclusiverange
+-- 
+-- Each \u TrailSurrogate for which the choice of associated u LeadSurrogate is ambiguous shall be associated with the nearest possible u LeadSurrogate that would otherwise have no corresponding \u TrailSurrogate.
+-- LeadSurrogate::
+-- Hex4Digitsbut only if the SV of Hex4Digits is in the inclusive range 0xD800 to 0xDBFF
+-- TrailSurrogate::
+-- Hex4Digitsbut only if the SV of Hex4Digits is in the inclusive range 0xDC00 to 0xDFFF
+-- NonSurrogate::
+-- Hex4Digitsbut only if the SV of Hex4Digits is not in the inclusive range 0xD800 to 0xDFFF
+
+-- IdentityEscape[U]::
+--   [+U]SyntaxCharacter
+--   [+U]/
+--   [~U]SourceCharacterbut not UnicodeIDContinue
+
+SyntaxIdentifyEscape.        IdentityEscapeC ::= SyntaxCharacter;
+NormalCharIdentifyEscape.    IdentityEscapeC ::= ExtraNormalChar;
+-- DecimalDigitIdentifyEscape.  IdentityEscapeC ::= DecimalDigit;
+
+-- DecimalEscape::
+-- NonZeroDigitDecimalDigitsopt[lookahead ∉ DecimalDigit]
+-- CharacterClassEscape[U]::
+--   d
+--   D
+--   s
+--   S
+--   w
+--   W
+--   [+U]p{UnicodePropertyValueExpression}
+--   [+U]P{UnicodePropertyValueExpression}
+
+CharacterClassEscaped. CharacterClassEscapeC ::= "d";
+CharacterClassEscapeD. CharacterClassEscapeC ::= "D";
+CharacterClassEscapes. CharacterClassEscapeC ::= "s";
+CharacterClassEscapeS. CharacterClassEscapeC ::= "S";
+CharacterClassEscapew. CharacterClassEscapeC ::= "w";
+CharacterClassEscapeW. CharacterClassEscapeC ::= "W";
+
+-- UnicodePropertyValueExpression::
+-- UnicodePropertyName=UnicodePropertyValue
+-- LoneUnicodePropertyNameOrValue
+-- UnicodePropertyName::
+-- UnicodePropertyNameCharacters
+-- UnicodePropertyNameCharacters::
+-- UnicodePropertyNameCharacterUnicodePropertyNameCharactersopt
+-- UnicodePropertyValue::
+-- UnicodePropertyValueCharacters
+-- LoneUnicodePropertyNameOrValue::
+-- UnicodePropertyValueCharacters
+-- UnicodePropertyValueCharacters::
+-- UnicodePropertyValueCharacterUnicodePropertyValueCharactersopt
+-- UnicodePropertyValueCharacter::
+-- UnicodePropertyNameCharacter
+-- DecimalDigit
+-- UnicodePropertyNameCharacter::
+-- ControlLetter
+-- _
+
+-- CharacterClass[U]::
+--   [[lookahead ≠ ^]ClassRanges[?U]]
+--   [^ClassRanges[?U]]
+
+PosClass.    CharacterClassC ::= "[" ClassRangesNoNegC "]";
+NegClass.    CharacterClassC ::= "[" "^" ClassRangesC "]";
+
+-- ClassRanges[U]::
+--   [empty]
+--   NonemptyClassRanges[?U]
+
+EmptyRange.     ClassRangesC      ::= ;
+NonEmptyRange.  ClassRangesC      ::= NEClassRangesC;
+
+-- Ranges that do not start with a ^ character
+EmptyRangeNN.   ClassRangesNoNegC ::= ;
+NonEmptyRangeNN.ClassRangesNoNegC ::= NEClassRangesNoNegC;
+
+-- NonemptyClassRanges[U]::
+--   ClassAtom[?U]
+--   ClassAtom[?U] NonemptyClassRangesNoDash[?U]
+--   ClassAtom[?U] - ClassAtom[?U] ClassRanges[?U]
+-- NonemptyClassRangesNoDash[U]::
+--   ClassAtom[?U]
+--   ClassAtomNoDash[?U]NonemptyClassRangesNoDash[?U]
+--   ClassAtomNoDash[?U]-ClassAtom[?U]ClassRanges[?U]
+
+ClassChar.          NEClassRangesC      ::= ClassAtomC;
+ClassCont.          NEClassRangesC      ::= ClassAtomC NEClassRangesNoDashC;
+ClassCharRange.     NEClassRangesC      ::= ClassAtomC "-" ClassAtomC
+                                            ClassRangesC;
+
+-- Ranges that do not start with a ^ character
+ClassCharNN.        NEClassRangesNoNegC ::= ClassAtomNoNegC;
+ClassContNN.        NEClassRangesNoNegC ::= ClassAtomNoNegC
+                                            NEClassRangesNoDashC;
+ClassCharRangeNN.   NEClassRangesNoNegC ::= ClassAtomNoNegC "-" ClassAtomC
+                                            ClassRangesC;
+
+-- Ranges that do not start with a - character
+ClassCharND.        NEClassRangesNoDashC ::= ClassAtomC;
+ClassContND.        NEClassRangesNoDashC ::= ClassAtomNoDashC
+                                             NEClassRangesNoDashC;
+ClassCharRangeND.   NEClassRangesNoDashC ::= ClassAtomNoDashC "-"
+                                             ClassAtomC ClassRangesC;
+
+-- ClassAtom[U]::
+--   -
+--   ClassAtomNoDash[?U]
+
+-- ClassAtomNoDash[U]::
+--   SourceCharacter but not one of \ or ] or -
+--   \ClassEscape[?U]
+
+DashAtom.     ClassAtomC        ::= "-";
+NegAtom.      ClassAtomC        ::= "^";
+NoDashAtom.   ClassAtomC        ::= ClassAtomNoDashNegC;
+
+NegAtomND.    ClassAtomNoDashC  ::= "^";
+NoDashAtomND. ClassAtomNoDashC  ::= ClassAtomNoDashNegC;
+
+DashAtomNN.   ClassAtomNoNegC   ::= "-";
+NoDashAtomNN. ClassAtomNoNegC   ::= ClassAtomNoDashNegC;
+
+-- We also exclude ^, which is handled separately
+ClassAtomNoDashNeg1.  ClassAtomNoDashNegC ::= NormalChar;
+ClassAtomNoDashNeg2.  ClassAtomNoDashNegC ::= DecimalDigit;
+ClassAtomNoDashNeg3.  ClassAtomNoDashNegC ::= SyntaxCharacterSub;
+ClassAtomNoDashNeg4.  ClassAtomNoDashNegC ::= "\\" ClassEscapeC;
+
+-- ClassEscape[U]::
+-- b
+-- [+U]-
+-- CharacterClassEscape[?U]
+-- CharacterEscape[?U]
+
+BClassEscape.     ClassEscapeC ::= "b";
+DashClassEscape.  ClassEscapeC ::= "-";
+CCEClassEscape.   ClassEscapeC ::= CharacterClassEscapeC;
+CEClassEscapeCE.  ClassEscapeC ::= CharacterEscapeC;
+
+-- An as extension, we also handle octal escape strings within character classes
+--
+-- TODO: octal sequences should only be accepted for the range [0, 255]
+--
+OctClassEscape1.  ClassEscapeC ::= OctalDigit;
+OctClassEscape2.  ClassEscapeC ::= OctalDigit OctalDigit;
+OctClassEscape3.  ClassEscapeC ::= OctalDigit OctalDigit OctalDigit;
+

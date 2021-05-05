@@ -1,0 +1,71 @@
+10,11c10,11
+<   private static final String _L_PAREN = new String("(");
+<   private static final String _R_PAREN = new String(")");
+---
+>   private static final String _L_PAREN = new String("");
+>   private static final String _R_PAREN = new String("");
+15,61c15
+<     if (s.equals("{"))
+<     {
+<        buf_.append("\n");
+<        indent();
+<        buf_.append(s);
+<        _n_ = _n_ + INDENT_WIDTH;
+<        buf_.append("\n");
+<        indent();
+<     }
+<     else if (s.equals("(") || s.equals("["))
+<        buf_.append(s);
+<     else if (s.equals(")") || s.equals("]"))
+<     {
+<        backup();
+<        buf_.append(s);
+<        buf_.append(" ");
+<     }
+<     else if (s.equals("}"))
+<     {
+<        int t;
+<        _n_ = _n_ - INDENT_WIDTH;
+<        for(t=0; t<INDENT_WIDTH; t++) {
+<          backup();
+<        }
+<        buf_.append(s);
+<        buf_.append("\n");
+<        indent();
+<     }
+<     else if (s.equals(","))
+<     {
+<        backup();
+<        buf_.append(s);
+<        buf_.append(" ");
+<     }
+<     else if (s.equals(";"))
+<     {
+<        backup();
+<        buf_.append(s);
+<        buf_.append("\n");
+<        indent();
+<     }
+<     else if (s.equals("")) return;
+<     else
+<     {
+<        buf_.append(s);
+<        buf_.append(" ");
+<     }
+---
+>       buf_.append(s);
+3466,3469c3420,3423
+<   private static void pp(Integer n, int _i_) { buf_.append(n); buf_.append(" "); }
+<   private static void pp(Double d, int _i_) { buf_.append(d); buf_.append(" "); }
+<   private static void pp(String s, int _i_) { buf_.append(s); buf_.append(" "); }
+<   private static void pp(Character c, int _i_) { buf_.append("'" + c.toString() + "'"); buf_.append(" "); }
+---
+>   private static void pp(Integer n, int _i_) { buf_.append(n); }
+>   private static void pp(Double d, int _i_) { buf_.append(d); }
+>   private static void pp(String s, int _i_) { buf_.append(s); }
+>   private static void pp(Character c, int _i_) { buf_.append("'" + c.toString() + "'"); }
+3492,3495d3445
+<      while (buf_.length() > 0 && buf_.charAt(0) == ' ')
+<         buf_.deleteCharAt(0); 
+<     while (buf_.length() > 0 && buf_.charAt(buf_.length()-1) == ' ')
+<         buf_.deleteCharAt(buf_.length()-1);
