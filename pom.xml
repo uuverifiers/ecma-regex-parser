@@ -5,7 +5,7 @@
      
   <groupId>uuverifiers</groupId>
   <artifactId>ecma2020-regex-parser</artifactId>
-  <version>0.5</version>
+  <version>0.6</version>
   <packaging>jar</packaging>
      
   <name>ecma2020-regex-parser</name>

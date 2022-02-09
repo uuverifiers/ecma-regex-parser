@@ -356,26 +356,17 @@ CharacterClassEscapes. CharacterClassEscapeC ::= "s";
 CharacterClassEscapeS. CharacterClassEscapeC ::= "S";
 CharacterClassEscapew. CharacterClassEscapeC ::= "w";
 CharacterClassEscapeW. CharacterClassEscapeC ::= "W";
+CharacterClassEscapep. CharacterClassEscapeC ::= "p" "{" UnicodePropertyValueExpressionC "}";
+CharacterClassEscapeP. CharacterClassEscapeC ::= "P" "{" UnicodePropertyValueExpressionC "}";
 
--- UnicodePropertyValueExpression::
--- UnicodePropertyName=UnicodePropertyValue
--- LoneUnicodePropertyNameOrValue
--- UnicodePropertyName::
--- UnicodePropertyNameCharacters
--- UnicodePropertyNameCharacters::
--- UnicodePropertyNameCharacterUnicodePropertyNameCharactersopt
--- UnicodePropertyValue::
--- UnicodePropertyValueCharacters
--- LoneUnicodePropertyNameOrValue::
--- UnicodePropertyValueCharacters
--- UnicodePropertyValueCharacters::
--- UnicodePropertyValueCharacterUnicodePropertyValueCharactersopt
--- UnicodePropertyValueCharacter::
--- UnicodePropertyNameCharacter
--- DecimalDigit
--- UnicodePropertyNameCharacter::
--- ControlLetter
--- _
+UPropNameValue.           UnicodePropertyValueExpressionC ::= [UnicodePropCharacter];
+
+UnicodePropControlLetter. UnicodePropCharacter            ::= ControlLetter;
+UnicodePropDecimalDigit.  UnicodePropCharacter            ::= DecimalDigit;
+UnicodePropUnderscore.    UnicodePropCharacter            ::= "_";
+UnicodePropEquals.        UnicodePropCharacter            ::= "=";
+
+separator nonempty UnicodePropCharacter "";
 
 -- CharacterClass[U]::
 --   [[lookahead ≠ ^]ClassRanges[?U]]
