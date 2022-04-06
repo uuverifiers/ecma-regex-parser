@@ -183,11 +183,12 @@ ControlLetterX.          ControlLetter      ::= "X";
 ControlLetterY.          ControlLetter      ::= "Y";
 ControlLetterZ.          ControlLetter      ::= "Z";
 
-token SpecialNormalChar  (char - ["@<>=-^$/\\.,:*+?!()[]{}|0123456789a-zA-Z"]);
+token SpecialNormalChar  (char - ["@<>=-^$/\\.,:*+?!()[]{}|_0123456789a-zA-Z"]);
 
 ControlLetterNormalChar. NormalChar         ::= ControlLetter;
 SpecialLetterNormalChar. NormalChar         ::= SpecialNormalChar;
 ExtraLetterNormalChar.   NormalChar         ::= ExtraNormalChar;
+UnderscoreNormalChar.    NormalChar         ::= "_";
 
 NormalChar1.             ExtraNormalChar    ::= ",";
 NormalChar2.             ExtraNormalChar    ::= "<";
