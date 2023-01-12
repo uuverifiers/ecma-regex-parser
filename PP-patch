@@ -64,8 +64,8 @@
 >   private static void pp(Double d, int _i_) { buf_.append(d); }
 >   private static void pp(String s, int _i_) { buf_.append(s); }
 >   private static void pp(Character c, int _i_) { buf_.append("'" + c.toString() + "'"); }
-3492,3495d3445
+3892,3895d3845
 <      while (buf_.length() > 0 && buf_.charAt(0) == ' ')
-<         buf_.deleteCharAt(0); 
+<         buf_.deleteCharAt(0);
 <     while (buf_.length() > 0 && buf_.charAt(buf_.length()-1) == ' ')
 <         buf_.deleteCharAt(buf_.length()-1);

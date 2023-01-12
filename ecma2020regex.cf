@@ -337,6 +337,9 @@ CodepointUniEscapeSequence. RegExpUnicodeEscapeSequenceC ::=
 
 SyntaxIdentifyEscape.        IdentityEscapeC ::= SyntaxCharacter;
 NormalCharIdentifyEscape.    IdentityEscapeC ::= ExtraNormalChar;
+SpecialNormalIdentityEscape. IdentityEscapeC ::= SpecialNormalChar;
+UnderscoreIdentityEscape.    IdentityEscapeC ::= "_";
+DashIdentityEscape.          IdentityEscapeC ::= "-";
 -- DecimalDigitIdentifyEscape.  IdentityEscapeC ::= DecimalDigit;
 
 -- DecimalEscape::
@@ -446,9 +449,11 @@ ClassAtomNoDashNeg4.  ClassAtomNoDashNegC ::= "\\" ClassEscapeC;
 -- CharacterEscape[?U]
 
 BClassEscape.     ClassEscapeC ::= "b";
-DashClassEscape.  ClassEscapeC ::= "-";
 CCEClassEscape.   ClassEscapeC ::= CharacterClassEscapeC;
 CEClassEscapeCE.  ClassEscapeC ::= CharacterEscapeC;
+
+-- Already handled in CharacterEscapeC
+-- DashClassEscape.  ClassEscapeC ::= "-";
 
 -- An as extension, we also handle octal escape strings within character classes
 --

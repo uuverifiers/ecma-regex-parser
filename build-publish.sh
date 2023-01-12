@@ -8,4 +8,5 @@ make ecma2020regex/Yylex.java ecma2020regex/sym.java ecma2020regex/parser.java
 patch ecma2020regex/PrettyPrinter.java PP-patch
 sed 's/PrettyPrinter/PrettyPrinterNonStatic/g' <ecma2020regex/PrettyPrinter.java | sed 's/static//g' >ecma2020regex/PrettyPrinterNonStatic.java
 
-mvn deploy
+#mvn deploy
+mvn package
